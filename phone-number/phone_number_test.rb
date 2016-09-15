@@ -20,7 +20,6 @@ class PhoneNumberTest < Minitest::Test
   end
 
   def test_invalid_with_letters_in_place_of_numbers
-    skip
     number = PhoneNumber.new('123-abc-1234').number
     assert_equal '0000000000', number
   end
