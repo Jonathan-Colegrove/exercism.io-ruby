@@ -6,6 +6,10 @@ class PhoneNumber
   end
 
   def number
+    if n =~ /[abcdefghijklmnopqrstuvwxyz]/
+      return '0000000000'
+    end
+
     r = @n.gsub(/[^0-9]/, '')
     if r.size == 11 && r[0] == "1"
       return r[1..-1]
