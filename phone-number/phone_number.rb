@@ -1,41 +1,42 @@
 class PhoneNumber
   attr_reader :n
+  INVALID_NUMBER = '0000000000'
 
   def initialize(n)
     @n = n
   end
 
-  def number
-    # If n contains letters
-    if n =~ /[a-z]/
-      return '0000000000'
-    end
-
-    r = @n.gsub(/[^0-9]/, '')
-
-    if r.size == 11 && r[0] == "1"
-      return r[1..-1]
-    elsif r.size == 10
-      return r
-    else
-      return '0000000000'
-    end
+  def r
+    n.gsub(/[^0-9]/, '')
   end
 
   def area_code
-    return @n.gsub(/[^0-9]/, '')[0..2]
+    n.gsub(/[^0-9]/, '')[0..2]
+  end
+
+  def number
+    if n =~ /[a-z]/
+      return INVALID_NUMBER
+    end
+
+    format { |number| number }
   end
 
   def to_s
-    r = @n.gsub(/[^0-9]/, '')
-    if r.size == 11 && r[0] == "1"
-      a = r[1..-1]
-      return "(#{a[0..2]}) #{a[3..5]}-#{a[6..9]}"
+    format { |number| format_with_area_code(number) }
+  end
+
+  def format
+    if r.size == 11 && r.start_with?("1")
+      yield r[1..-1]
     elsif r.size == 10
-      return "(#{r[0..2]}) #{r[3..5]}-#{r[6..9]}"
+      yield r
     else
-      return '0000000000'
+      INVALID_NUMBER
     end
   end
 
+  def format_with_area_code(number)
+    "(#{number[0..2]}) #{number[3..5]}-#{number[6..9]}"
+  end
 end
